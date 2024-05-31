@@ -1,6 +1,7 @@
 # pdf_processing.py
 
 # Necessary imports
+from pickle import TRUE
 import streamlit as st
 from langchain_community.document_loaders import PyPDFLoader
 import os
@@ -43,10 +44,9 @@ class DocumentProcessor:
         
         # Step 1: Render a file uploader widget. Replace 'None' with the Streamlit file uploader code.
         uploaded_files = st.file_uploader(
-            #####################################
-            # Allow only type `pdf`
-            # Allow multiple PDFs for ingestion
-            #####################################
+            "Upload a PDF file", 
+            type=['pdf'], 
+            accept_multiple_files=True
         )
         
         if uploaded_files is not None:
@@ -66,9 +66,13 @@ class DocumentProcessor:
                 # Use PyPDFLoader here to load the PDF and extract pages.
                 # https://python.langchain.com/docs/modules/data_connection/document_loaders/pdf#using-pypdf
                 # You will need to figure out how to use PyPDFLoader to process the temporary file.
+                temp_loader = PyPDFLoader(temp_file_path)
+                temp_file_pages = temp_loader.load_and_split()
                 
                 # Step 3: Then, Add the extracted pages to the 'pages' list.
                 #####################################
+                for page in temp_file_pages:
+                    if page not in self.pages: self.pages.append(page)
                 
                 # Clean up by deleting the temporary file.
                 os.unlink(temp_file_path)
