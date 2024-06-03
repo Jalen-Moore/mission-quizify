@@ -40,18 +40,18 @@ Implementation Guidance:
 """
 
 if __name__ == "__main__":
-    st.header("Quizzify")
+    st.header("Quizify")
 
     # Configuration for EmbeddingClient
     embed_config = {
         "model_name": "textembedding-gecko@003",
-        "project": "YOUR PROJECT ID HERE",
+        "project": "gemini-quizify-424918",
         "location": "us-central1"
     }
     
     screen = st.empty() # Screen 1, ingest documents
     with screen.container():
-        st.header("Quizzify")
+        st.header("Quizify")
         ####### YOUR CODE HERE #######
         # 1) Initalize DocumentProcessor and Ingest Documents from Task 3
         # 2) Initalize the EmbeddingClient from Task 4 with embed config
