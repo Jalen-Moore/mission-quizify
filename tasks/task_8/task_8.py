@@ -9,6 +9,7 @@ from tasks.task_5.task_5 import ChromaCollectionCreator
 
 from langchain_core.prompts import PromptTemplate
 from langchain_google_vertexai import VertexAI
+from langchain_core.output_parsers import JsonOutputParser
 
 class QuizGenerator:
     def __init__(self, topic=None, num_questions=1, vectorstore=None):
@@ -96,8 +97,11 @@ class QuizGenerator:
         setup_and_retrieval = RunnableParallel(
             {"context": retriever, "topic": RunnablePassthrough()}
         )
+
+        parser = JsonOutputParser()
+
         # Create a chain with the Retriever, PromptTemplate, and LLM
-        chain = setup_and_retrieval | prompt | self.llm 
+        chain = setup_and_retrieval | prompt | self.llm | parser
 
         # Invoke the chain with the topic as input
         response = chain.invoke(self.topic)
@@ -130,7 +134,7 @@ class QuizGenerator:
             ##### YOUR CODE HERE #####
             try:
                 # Convert the JSON String to a dictionary
-                question = json.loads(question_str)
+                question = question_str
             except json.JSONDecodeError:
                 print("Failed to decode question JSON.")
                 continue  # Skip this iteration if JSON decoding fails
